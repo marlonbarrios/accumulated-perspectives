@@ -1,43 +1,49 @@
 'use strict';
 
-var img;
-var tileCountX = 4;
-var tileCountY = 4;
-var tileCount = tileCountX * tileCountY;
-var imgTiles = [];
-var tileWidth;
-var tileHeight;
+var img; // Variable to hold the base image
+var tileCountX = 4; // Number of tiles in the X direction
+var tileCountY = 4; // Number of tiles in the Y direction
+var tileCount = tileCountX * tileCountY; // Total number of tiles
+var imgTiles = []; // Array to hold the sampled image tiles
+var tileWidth; // Width of each tile
+var tileHeight; // Height of each tile
 var randomMode = true; // Start in random mode
-var intervalMin = 1000; // Minimum interval in milliseconds
-var intervalMax = 5000; // Maximum interval in milliseconds
-var nextChangeTime;
+var intervalMin = 1000; // Minimum interval in milliseconds for changing the sampled areas
+var intervalMax = 5000; // Maximum interval in milliseconds for changing the sampled areas
+var nextChangeTime; // Time for the next change
+var fadePercentage = 0.2; // Percentage of tiles to fade in/out
 
 function preload() {
+  // Load the base image
   img = loadImage('butt14.png');
 }
 
 function setup() {
+  // Set up the canvas
   createCanvas(windowWidth, windowHeight);
 
   // Set the initial interval for changing the selected area
   setNextChangeTime();
 
+  // Calculate the initial tile dimensions
   tileWidth = width / tileCountY;
   tileHeight = height / tileCountX;
 
-  // Initialize imgTiles array
+  // Initialize the imgTiles array with sampled image tiles
   sampleTiles();
 
+  // Set drawing properties
   noFill();
   stroke(255);
-  background(100, 100, 100);
+  background(100, 100, 100); // Initial background color
 }
 
 function resize() {
+  // Resize the canvas and recalculate tile dimensions when the window is resized
   resizeCanvas(windowWidth, windowHeight);
   tileWidth = width / tileCountY;
   tileHeight = height / tileCountX;
-  sampleTiles();
+  sampleTiles(); // Resample when window is resized
 }
 
 function draw() {
@@ -60,12 +66,14 @@ function draw() {
 }
 
 function sampleTiles() {
+  // Sample areas from the base image and store them in the imgTiles array
   imgTiles = [];
 
   for (var gridY = 0; gridY < tileCountY; gridY++) {
     for (var gridX = 0; gridX < tileCountX; gridX++) {
       var sampleX, sampleY;
       if (randomMode) {
+        // Randomly sample areas
         sampleX = int(random(width - tileWidth));
         sampleY = int(random(height - tileHeight));
       } else {
